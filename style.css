@@ -1,4 +1,12 @@
+body{
+    display: flex;
+    height: 100svh;
+    justify-content: center;
+    align-items: center;
+}
 #game{
-    background-color: black;
+   
+    background-color:rgb(6, 70, 70);
+
     
 }

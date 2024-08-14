@@ -1,6 +1,14 @@
 const canvas = document.getElementById("game");
 const c = canvas.getContext("2d");
-
+const keys = {
+  arrowRight : {
+    pressed : false 
+  } ,
+  arrowLeft : {
+    pressed : false
+  }
+  
+}
 canvas.width = 375;
 canvas.height = 500;
 
@@ -55,6 +63,18 @@ class Ship {
     this.draw();
     this.position.x = this.position.x + this.velocity.x;
 
+    if (keys.arrowRight.pressed) {
+      ship.velocity.x= 3;
+    }
+    else if(keys.arrowLeft.pressed) {
+      
+      ship.velocity.x= -3;
+    }
+    else {
+      ship.velocity.x= 0;
+    }
+  
+
   }
   }
 }
@@ -76,14 +96,28 @@ animate();
 addEventListener("keydown", ({ key }) => {
   switch (key) {
     case "ArrowRight":
-      ship.velocity.x= 2;
-      
 
+     keys.arrowRight.pressed = true
+      
       break;
     case "ArrowLeft":
-      ship.velocity.x= -2;
+      keys.arrowLeft.pressed = true
+
       break;
-    case " ":
-      break;
+    
   }
 });
+addEventListener("keyup", ({ key }) => {
+  switch (key) {
+    case "ArrowRight":
+
+     keys.arrowRight.pressed = false      
+      break;
+    case "ArrowLeft":
+      keys.arrowLeft.pressed = false
+
+      break;
+    
+  }
+});
+

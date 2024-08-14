@@ -18,7 +18,7 @@ class Ship {
 
     this.velocity = {
       x: 0,
-      y: 2,
+      y: 0,
     };
 
     const image = new Image();
@@ -31,46 +31,59 @@ class Ship {
   }
 
   draw() {
-    c.fillStyle = "red";
+    /*c.fillStyle = "red";
 
-    /*c.fillRect(
+    c.fillRect(
       this.position.x,
       this.position.y,
       this.size.width,
       this.size.height
     ); */
 
-    if (this.image) {
-      c.drawImage(
-        this.image,
-        this.position.x,
-        this.position.y,
-        this.imgW,
-        this.imgH
-      );
-    }
+    c.drawImage(
+      this.image,
+      this.position.x,
+      this.position.y,
+      this.imgW,
+      this.imgH
+    );
   }
 
+  update() {
+    
+    if (this.image) {  
+    this.draw();
+    this.position.x = this.position.x + this.velocity.x;
 
-
+  }
+  }
 }
 
 const ship = new Ship();
 
+
 function animate() {
   requestAnimationFrame(animate);
-  ship.draw();
+  
+   
+  c.clearRect(0, 0, canvas.width, canvas.height);
+
+  
+  ship.update();
 }
 animate();
 
 addEventListener("keydown", ({ key }) => {
   switch (key) {
     case "ArrowRight":
+      ship.velocity.x= 2;
+      
 
       break;
     case "ArrowLeft":
+      ship.velocity.x= -2;
       break;
     case " ":
       break;
   }
-}); 
+});

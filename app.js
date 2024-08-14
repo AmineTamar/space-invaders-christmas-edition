@@ -63,17 +63,7 @@ class Ship {
     this.draw();
     this.position.x = this.position.x + this.velocity.x;
 
-    if (keys.arrowRight.pressed) {
-      ship.velocity.x= 3;
-    }
-    else if(keys.arrowLeft.pressed) {
-      
-      ship.velocity.x= -3;
-    }
-    else {
-      ship.velocity.x= 0;
-    }
-  
+
 
   }
   }
@@ -87,9 +77,23 @@ function animate() {
   
    
   c.clearRect(0, 0, canvas.width, canvas.height);
-
-  
   ship.update();
+
+  if (keys.arrowRight.pressed && ship.position.x + ship.imgW <= canvas.width) {
+    ship.velocity.x= 3;
+  }
+  else if(keys.arrowLeft.pressed && ship.position.x >=0) {
+    
+    ship.velocity.x= -3;
+  }
+  else {
+    ship.velocity.x= 0;
+  }
+
+
+
+
+
 }
 animate();
 

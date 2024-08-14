@@ -18,7 +18,7 @@ class Ship {
 
     this.velocity = {
       x: 0,
-      y: 0,
+      y: 2,
     };
 
     const image = new Image();
@@ -63,13 +63,14 @@ function animate() {
 }
 animate();
 
-/*addEventListener("keydown", ({ key }) => {
+addEventListener("keydown", ({ key }) => {
   switch (key) {
     case "ArrowRight":
+
       break;
     case "ArrowLeft":
       break;
     case " ":
       break;
   }
-}); */
+}); 

@@ -69,7 +69,7 @@ class Ship {
   }
 }
 
-const ship = new Ship();
+const santa = new Ship();
 
 
 function animate() {
@@ -77,17 +77,17 @@ function animate() {
   
    
   c.clearRect(0, 0, canvas.width, canvas.height);
-  ship.update();
+  santa.update();
 
-  if (keys.arrowRight.pressed && ship.position.x + ship.imgW <= canvas.width) {
-    ship.velocity.x= 3;
+  if (keys.arrowRight.pressed && santa.position.x + santa.imgW <= canvas.width) {
+    santa.velocity.x= 3;
   }
-  else if(keys.arrowLeft.pressed && ship.position.x >=0) {
+  else if(keys.arrowLeft.pressed && santa.position.x >=0) {
     
-    ship.velocity.x= -3;
+    santa.velocity.x= -3;
   }
   else {
-    ship.velocity.x= 0;
+    santa.velocity.x= 0;
   }
 
 

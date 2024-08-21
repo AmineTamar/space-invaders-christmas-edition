@@ -1,14 +1,13 @@
 const canvas = document.getElementById("game");
 const c = canvas.getContext("2d");
 const keys = {
-  arrowRight : {
-    pressed : false 
-  } ,
-  arrowLeft : {
-    pressed : false
-  }
-  
-}
+  arrowRight: {
+    pressed: false,
+  },
+  arrowLeft: {
+    pressed: false,
+  },
+};
 canvas.width = 375;
 canvas.height = 500;
 
@@ -58,70 +57,101 @@ class Ship {
   }
 
   update() {
-    
-    if (this.image) {  
-    this.draw();
-    this.position.x = this.position.x + this.velocity.x;
-
-
-
-  }
+    if (this.image) {
+      this.draw();
+      this.position.x = this.position.x + this.velocity.x;
+    }
   }
 }
 
-const santa = new Ship();
+class Projectile {
+  constructor({ position, velocity }) {
+    this.position = position;
+    this.velocity = velocity;
+    this.radius = 3;
+  }
 
+  draw() {
+    c.beginPath();
+    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+    c.fill();
+    c.fillStyle = "red";
+    c.closePath();
+  }
+
+  update() {
+    this.draw();
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+  }
+}
+
+const projectile = [];
+
+const santa = new Ship();
 
 function animate() {
   requestAnimationFrame(animate);
-  
-   
+
   c.clearRect(0, 0, canvas.width, canvas.height);
   santa.update();
-
-  if (keys.arrowRight.pressed && santa.position.x + santa.imgW <= canvas.width) {
-    santa.velocity.x= 3;
-  }
-  else if(keys.arrowLeft.pressed && santa.position.x >=0) {
+  projectile.forEach((proj, i) => {
+    if (proj.position.y + proj.radius <= 0) {
+      setTimeout(()=> {   projectile.splice(i, 1),0.1 } )
     
-    santa.velocity.x= -3;
+    } else {
+      proj.update();
+    }
+  });
+
+  if (
+    keys.arrowRight.pressed &&
+    santa.position.x + santa.imgW <= canvas.width
+  ) {
+    santa.velocity.x = 3;
+  } else if (keys.arrowLeft.pressed && santa.position.x >= 0) {
+    santa.velocity.x = -3;
+  } else {
+    santa.velocity.x = 0;
   }
-  else {
-    santa.velocity.x= 0;
-  }
-
-
-
-
-
 }
 animate();
 
 addEventListener("keydown", ({ key }) => {
   switch (key) {
     case "ArrowRight":
+      keys.arrowRight.pressed = true;
 
-     keys.arrowRight.pressed = true
-      
       break;
     case "ArrowLeft":
-      keys.arrowLeft.pressed = true
+      keys.arrowLeft.pressed = true;
 
       break;
-    
   }
 });
 addEventListener("keyup", ({ key }) => {
   switch (key) {
     case "ArrowRight":
-
-     keys.arrowRight.pressed = false      
+      keys.arrowRight.pressed = false;
       break;
     case "ArrowLeft":
-      keys.arrowLeft.pressed = false
+      keys.arrowLeft.pressed = false;
 
       break;
-    
+    case " ":
+   
+      projectile.push(
+        new Projectile({
+          position: {
+            x: santa.position.x + santa.size.width / 2,
+            y: santa.position.y + santa.size.height / 2,
+          },
+          velocity: {
+            x: 0,
+            y: -7,
+          },
+        })
+      );
+      break;
   }
 });
-

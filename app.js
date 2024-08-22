@@ -1,16 +1,8 @@
 const canvas = document.getElementById("game");
 const c = canvas.getContext("2d");
-const keys = {
-  arrowRight: {
-    pressed: false,
-  },
-  arrowLeft: {
-    pressed: false,
-  },
-};
 canvas.width = 375;
 canvas.height = 500;
-// ship class *********** 
+// ship class ***********
 class Ship {
   constructor() {
     this.position = {
@@ -66,8 +58,6 @@ class Ship {
 
 //**********end ship class  */
 
-
-
 // Projectile class
 class Projectile {
   constructor({ position, velocity }) {
@@ -93,13 +83,12 @@ class Projectile {
 
 // END Projectile class
 
-
-// invader class ******* // 
+// invader class ******* //
 class Invader {
-  constructor() {
+  constructor({ position }) {
     this.position = {
-      x: canvas.height/2,
-      y: canvas.width/2,
+      x: position.x,
+      y: position.y,
     };
 
     this.size = {
@@ -131,37 +120,107 @@ class Invader {
     );
   }
 
-  update() {
+  update({velocity}) {
     if (this.image) {
       this.draw();
-      this.position.x = this.position.x + this.velocity.x;
-      this.position.y = this.position.y + this.velocity.y;
+     this.position.x += velocity.x
+     this.position.y += velocity.y
     }
   }
 }
 
+// end invader class******  //
 
-// end invader class******  // 
+// InvaderGrid class ******* //
 
-const invader = new Invader();
+class InvaderGrid {
+  constructor() {
+    this.position = {
+      x: 0,
+      y: 0,
+    };
+
+    this.velocity = {
+      x: 2,
+      y: 0,
+    };
+
+    this.invaderGifts = [];
+
+
+    const cols = (Math.floor(Math.random()*5) + 5 )
+    const rows = (Math.floor(Math.random()*5) + 2)
+
+  this.width = cols * 32
+    
+    for (let i = 0; i < cols; i++) {
+      for (let y = 0; y < rows; y++) {
+      this.invaderGifts.push(new Invader({ 
+        position: {
+           x: (i * 32)-16,
+            y: y * 32 
+          }
+           })
+          )
+    }
+  }
+  }
+
+  update() {
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+    this.velocity.y=0
+
+    if (this.position.x + this.width >= canvas.width || this.position.x <= 0) {
+        this.velocity.x = -this.velocity.x;
+        this.velocity.y=30
+    }
+}
+
+}
+
+//end InvaderGrid class ////
+
+// variables //
+
+const keys = {
+  arrowRight: {
+    pressed: false,
+  },
+  arrowLeft: {
+    pressed: false,
+  },
+};
 
 const projectile = [];
 
 const santa = new Ship();
 
+const invaderGrid = [new InvaderGrid()];
 
+// ********* / /
+
+// ***  animate function //
 function animate() {
   requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
-  invader.update();
+
   santa.update();
   projectile.forEach((proj, i) => {
     if (proj.position.y + proj.radius <= 0) {
-      setTimeout(()=> {   projectile.splice(i, 1),0.1 } )
-    
+      setTimeout(() => {
+        projectile.splice(i, 1), 0.1;
+      });
     } else {
       proj.update();
     }
+  });
+
+  invaderGrid.forEach((grid) => {
+    grid.update();
+    grid.invaderGifts.forEach((invader) => {
+      invader.update({velocity: grid.velocity});
+    });
   });
 
   if (
@@ -199,7 +258,6 @@ addEventListener("keyup", ({ key }) => {
 
       break;
     case " ":
-   
       projectile.push(
         new Projectile({
           position: {

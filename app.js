@@ -10,7 +10,7 @@ const keys = {
 };
 canvas.width = 375;
 canvas.height = 500;
-
+// ship class *********** 
 class Ship {
   constructor() {
     this.position = {
@@ -64,6 +64,11 @@ class Ship {
   }
 }
 
+//**********end ship class  */
+
+
+
+// Projectile class
 class Projectile {
   constructor({ position, velocity }) {
     this.position = position;
@@ -86,14 +91,69 @@ class Projectile {
   }
 }
 
+// END Projectile class
+
+
+// invader class ******* // 
+class Invader {
+  constructor() {
+    this.position = {
+      x: canvas.height/2,
+      y: canvas.width/2,
+    };
+
+    this.size = {
+      width: 64,
+      height: 32,
+    };
+
+    this.velocity = {
+      x: 0,
+      y: 0,
+    };
+
+    const image = new Image();
+    image.src = "./assets/invader1.png";
+    image.onload = () => {
+      this.image = image;
+      this.imgW = image.width;
+      this.imgH = image.height;
+    };
+  }
+
+  draw() {
+    c.drawImage(
+      this.image,
+      this.position.x,
+      this.position.y,
+      this.imgW,
+      this.imgH
+    );
+  }
+
+  update() {
+    if (this.image) {
+      this.draw();
+      this.position.x = this.position.x + this.velocity.x;
+      this.position.y = this.position.y + this.velocity.y;
+    }
+  }
+}
+
+
+// end invader class******  // 
+
+const invader = new Invader();
+
 const projectile = [];
 
 const santa = new Ship();
 
+
 function animate() {
   requestAnimationFrame(animate);
-
   c.clearRect(0, 0, canvas.width, canvas.height);
+  invader.update();
   santa.update();
   projectile.forEach((proj, i) => {
     if (proj.position.y + proj.radius <= 0) {
